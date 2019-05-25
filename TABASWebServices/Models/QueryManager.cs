@@ -158,8 +158,291 @@ namespace TABASWebServices.Models
 
 
 
+        /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE PLANE_TYPE ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This methods returns all the rows on the Plane Type Table  from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Plane_Type> GetPlaneTypes()
+        {
+            var rlist = new List<Plane_Type>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM PLANE_TYPES";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Plane_Type();
+                        result.TYPE_ID = (int)lector["TYPE_ID"];
+                        result.MODEL = (string)lector["MODEL"];
+                        result.STORAGE_BINS = (int)lector["STORAGE_BINS"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+
+        /// <summary>
+        /// This method returns an Plane Type from the PostgreSQL Database by its id
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public Plane_Type GetPlaneTypebyid(int a)
+        {
+            var result = new Plane_Type();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM AIRPORT WHERE TYPE_D =" + "'" + a + "'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    while (lector.Read())
+                    {
+                        result.TYPE_ID = (int)lector["TYPE_ID"];
+                        result.MODEL = (string)lector["MODEL"];
+                        result.STORAGE_BINS = (int)lector["STATE_CODE"];
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return result;
+        }
+
+
+
         /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE AIRPLANE ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        /// <summary>
+        /// This methods returns all the rows on the Airplane Detail View  from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Airplane> GetAirplanes()
+        {
+            var rlist = new List<Airplane>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM AIRPLANE_DETAILS";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Airplane();
+                        result.AIRPLANE_ID = (int)lector["PLANE_ID"];
+                        result.PILOT_FULLNAME = (string) lector["PILOT_FULLNAME"];
+                        result.MODEL = (string)lector["MODEL"];
+                        result.STORAGE_BINS = (int)lector["STORAGE_BINS"];
+                        result.CAPACITY = (int)lector["CAPACITY"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+
+        /// <summary>
+        /// This method returns an Airplane from the PostgreSQL Database by its ID 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public Airplane GetAirplanebyid(int a)
+        {
+            var result = new Airplane();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM AIRPLANE_DETAILS WHERE AIRPLANE_ID =" + "'" + a + "'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    while (lector.Read())
+                    {
+                        result.AIRPLANE_ID = (int)lector["PLANE_ID"];
+                        result.PILOT_FULLNAME = (string)lector["PILOT_FULLNAME"];
+                        result.MODEL = (string)lector["MODEL"];
+                        result.STORAGE_BINS = (int)lector["STORAGE_BINS"];
+                        result.CAPACITY = (int)lector["CAPACITY"];
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return result;
+        }
+
+
+        /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE FLIGHT ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        /// <summary>
+        /// This methods returns all the rows on the Flight Info View  from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Flight> GetFlights()
+        {
+            var rlist = new List<Flight>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM FLIGHT_INFO";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Flight();
+                        result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
+                        result.ORIGIN_AIRPORT = (string)lector["ORIGIN_AIRPORT"];
+                        result.DESTINATION_AIRPORT = (string)lector["DESTINATION_AIRPORT"];
+                        result.DEPARTURE_DATE = lector["DEPARTURE_DATE"].ToString();
+                        result.DEPARTURE_HOUR = lector["DEPARTURE_HOUR"].ToString();
+                        result.PRICE = (int)lector["PRICE"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.BAG_CAPACITY = (int)lector["BAG_CAPACITY"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+        /// <summary>
+        /// This method returns an Flight from the PostgreSQL Database by its ID 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public Flight GetFlightbyid(int a)
+        {
+            var result = new Flight();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM FLIGHT_INFO WHERE FLIGHT_ID =" + "'" + a + "'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    while (lector.Read())
+                    {
+                        result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
+                        result.ORIGIN_AIRPORT = (string)lector["ORIGIN_AIRPORT"];
+                        result.DESTINATION_AIRPORT = (string)lector["DESTINATION_AIRPORT"];
+                        result.DEPARTURE_DATE = lector["DEPARTURE_DATE"].ToString();
+                        result.DEPARTURE_HOUR = lector["DEPARTURE_HOUR"].ToString();
+                        result.PRICE = (int)lector["PRICE"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.BAG_CAPACITY = (int)lector["BAG_CAPACITY"];
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// This method returns an Flight from the PostgreSQL Database by its origin and destiny 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        public Flight GetFlightbyod(string o, string d)
+        {
+            var result = new Flight();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM FLIGHT_INFO WHERE ORIGIN_AIRPORT =" + "'" + o + "'" + " AND DESTINATION_AIRPORT =" + "'" + d + "'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    while (lector.Read())
+                    {
+                        result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
+                        result.ORIGIN_AIRPORT = (string)lector["ORIGIN_AIRPORT"];
+                        result.DESTINATION_AIRPORT = (string)lector["DESTINATION_AIRPORT"];
+                        result.DEPARTURE_DATE = lector["DEPARTURE_DATE"].ToString();
+                        result.DEPARTURE_HOUR = lector["DEPARTURE_HOUR"].ToString();
+                        result.PRICE = (int)lector["PRICE"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.BAG_CAPACITY = (int)lector["BAG_CAPACITY"];
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return result;
+        }
+
+        /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE BRAND ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     }

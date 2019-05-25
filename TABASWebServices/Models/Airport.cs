@@ -6,7 +6,7 @@ using System.Web;
 namespace TABASWebServices.Models
 {
     /// <summary>
-    /// This Class represents the Airport entity on the database
+    /// This C;
     /// </summary>
     public class Airport
     {
