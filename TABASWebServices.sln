@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TABASWebServices", "TABASWebServices\TABASWebServices.csproj", "{93D12391-DB83-4604-ABD5-04D45966A4AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginAPI", "LoginAPI\LoginAPI.csproj", "{EDDD1B86-31A2-44F5-9996-9752347EA4CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{93D12391-DB83-4604-ABD5-04D45966A4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93D12391-DB83-4604-ABD5-04D45966A4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93D12391-DB83-4604-ABD5-04D45966A4AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDDD1B86-31A2-44F5-9996-9752347EA4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDDD1B86-31A2-44F5-9996-9752347EA4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDDD1B86-31A2-44F5-9996-9752347EA4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDDD1B86-31A2-44F5-9996-9752347EA4CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
