@@ -179,18 +179,29 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AirplanesController.cs" />
     <Compile Include="Controllers\AirportsController.cs" />
+    <Compile Include="Controllers\BagcartController.cs" />
+    <Compile Include="Controllers\BagController.cs" />
+    <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\FlightsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlaneTypeController.cs" />
+    <Compile Include="Controllers\ScannerController.cs" />
+    <Compile Include="Controllers\ShipperController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Airplane.cs" />
     <Compile Include="Models\Airport.cs" />
+    <Compile Include="Models\Bag.cs" />
+    <Compile Include="Models\Bagcart.cs" />
+    <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\ConnectionPostgreSQL.cs" />
     <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\Plane_Type.cs" />
     <Compile Include="Models\QueryManager.cs" />
+    <Compile Include="Models\Scanner.cs" />
+    <Compile Include="Models\Shipper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
