@@ -14,7 +14,7 @@ namespace TABASWebServices.Controllers
         /// Returns all the bags from the database
         /// </summary>
         /// <returns></returns>
-        [Route("Scanning")]
+        [Route("Scans")]
         [HttpGet]
         public List<Scanner> GetScans()
         {
@@ -26,7 +26,7 @@ namespace TABASWebServices.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("Scanning/{id}")]
+        [Route("Scans/{id}")]
         [HttpGet]
         public HttpResponseMessage GetScanByid(int id)
         {
@@ -47,7 +47,7 @@ namespace TABASWebServices.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("Scanning/Supervisor/{id}")]
+        [Route("Scans/Supervisor/{id}")]
         [HttpGet]
         public HttpResponseMessage GetScanBySuper(string id)
         {
@@ -69,7 +69,7 @@ namespace TABASWebServices.Controllers
         /// </summary>
         /// <param name="bag"></param>
         /// <returns></returns>
-        [Route("Scanning/AddScan")]
+        [Route("Scans/AddScan")]
         [HttpPost]
         public HttpResponseMessage PostFlight([FromBody] Scanner scan)
         {
@@ -84,6 +84,47 @@ namespace TABASWebServices.Controllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+        /// <summary>
+        /// Modifies a status
+        /// </summary>
+        /// <param name="shp"></param>
+        /// <returns></returns>
+        [Route("Scans/Bag/{id}/A")]
+        [HttpPut]
+        public void UpdateBagStatus(int id)
+        {
+            try
+            {
+                QueryManager.GetInstance().UpdateScAStatus(id);
+                var message = Request.CreateResponse(HttpStatusCode.Accepted);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Modifies a status
+        /// </summary>
+        /// <param name="shp"></param>
+        /// <returns></returns>
+        [Route("Scans/Bag/{id}/D")]
+        [HttpPut]
+        public void UpdateBagStatusD(int id)
+        {
+            try
+            {
+                QueryManager.GetInstance().UpdateScDStatus(id);
+                var message = Request.CreateResponse(HttpStatusCode.Accepted);
+
+            }
+            catch (Exception ex)
+            {
             }
         }
     }

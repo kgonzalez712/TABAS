@@ -5,9 +5,7 @@ using System.Web;
 
 namespace TABASWebServices.Models
 {
-    public class Brand
+    public class B
     {
-        public int BRAND_ID { get; set; }
-        public string BRAND_NAME { get; set; }
     }
 }

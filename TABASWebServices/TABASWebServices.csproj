@@ -193,9 +193,11 @@
     </Compile>
     <Compile Include="Models\Airplane.cs" />
     <Compile Include="Models\Airport.cs" />
+    <Compile Include="Models\B.cs" />
     <Compile Include="Models\Bag.cs" />
     <Compile Include="Models\Bagcart.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\BC.cs" />
     <Compile Include="Models\ConnectionPostgreSQL.cs" />
     <Compile Include="Models\Flight.cs" />
     <Compile Include="Models\Plane_Type.cs" />
@@ -255,6 +257,7 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <None Include="Properties\PublishProfiles\TABASwebservices - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

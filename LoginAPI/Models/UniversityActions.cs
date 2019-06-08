@@ -15,7 +15,7 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             conn.Open();
             command = new SqlCommand("SELECT * FROM UNIVERSITY WHERE UNIVERSITY_ID>0", conn);
             read = command.ExecuteReader();
@@ -65,7 +65,7 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Data Source=DESKTOP-5SKOEVC;Initial Catalog=LOGINDB;Integrated Security=True; User ID=sa;Password=12345");
             conn.Open();
             command = new SqlCommand("INSERT INTO UNIVERSITY(UNIVERSITY_NAME) VALUES('" + name.ToString() + "')", conn);
             read = command.ExecuteReader();

@@ -16,9 +16,20 @@ namespace TABASWebServices.Controllers
         /// <returns></returns>
         [Route("Bagcarts")]
         [HttpGet]
-        public List<Bagcart> GetBrands()
+        public List<Bagcart> GetBagcarts()
         {
             return QueryManager.GetInstance().GetBagCarts();
+        }
+
+        /// <summary>
+        /// Returns all the airports from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bagcarts/NF/{id}")]
+        [HttpGet]
+        public List<Bagcart> GetBagcartsD(int id)
+        {
+            return QueryManager.GetInstance().GetBagCartsNF(id);
         }
 
         /// <summary>
@@ -28,7 +39,7 @@ namespace TABASWebServices.Controllers
         /// <returns></returns>
         [Route("Bagcarts/{id}")]
         [HttpGet]
-        public HttpResponseMessage GetBrandByid(int id)
+        public HttpResponseMessage GetBagcartByid(int id)
         {
             var ent = QueryManager.GetInstance().GetBagcartbyid(id);
             if (ent != null)
@@ -50,13 +61,13 @@ namespace TABASWebServices.Controllers
         /// <returns></returns>
         [Route("Bagcarts/AddBagcart")]
         [HttpPost]
-        public HttpResponseMessage PostFlight([FromBody] Bagcart bagcart)
+        public HttpResponseMessage PostBC([FromBody] BC bc)
         {
             try
             {
-                QueryManager.GetInstance().Insert_Bagcart(bagcart);
-                var message = Request.CreateResponse(HttpStatusCode.Created, bagcart);
-                message.Headers.Location = new Uri(Request.RequestUri + bagcart.BAGCART_ID.ToString());
+                QueryManager.GetInstance().Insert_Bagcart(bc);
+                var message = Request.CreateResponse(HttpStatusCode.Created, bc);
+                message.Headers.Location = new Uri(Request.RequestUri + bc.BAGCART_ID.ToString());
                 return message;
 
             }

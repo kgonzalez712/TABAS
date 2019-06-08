@@ -22,6 +22,60 @@ namespace TABASWebServices.Controllers
         }
 
         /// <summary>
+        /// Returns all the bags from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bags/Client/{id}")]
+        [HttpGet]
+        public List<Bag> GetCBags(string id)
+        {
+            return QueryManager.GetInstance().GetClientsBags(id);
+        }
+
+        /// <summary>
+        /// Returns all the bags from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bags/Bagcart/{id}")]
+        [HttpGet]
+        public List<Bag> GetBCBags(int id)
+        {
+            return QueryManager.GetInstance().GetBagsBC(id);
+        }
+
+        /// <summary>
+        /// Returns all the bags from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bags/Acepted")]
+        [HttpGet]
+        public List<Bag> GetABags()
+        {
+            return QueryManager.GetInstance().GetAceptedBags();
+        }
+
+        /// <summary>
+        /// Returns all the bags from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bags/Bagcart/{id}/Acepted")]
+        [HttpGet]
+        public List<Bag> GetABCBags(int id)
+        {
+            return QueryManager.GetInstance().GetAceptedBagsBC(id);
+        }
+
+        /// <summary>
+        /// Returns all the bags from the database
+        /// </summary>
+        /// <returns></returns>
+        [Route("Bags/Denied")]
+        [HttpGet]
+        public List<Bag> GetDBags()
+        {
+            return QueryManager.GetInstance().GetDenniedBags();
+        }
+        /// <summary>
         /// returns an airport by its iata code
         /// </summary>
         /// <param name="id"></param>
@@ -65,5 +119,6 @@ namespace TABASWebServices.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
+
     }
 }

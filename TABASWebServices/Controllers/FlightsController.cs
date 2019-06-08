@@ -26,11 +26,11 @@ namespace TABASWebServices.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("Flights/{id}")]
+        [Route("Flights/Airplane/{id}")]
         [HttpGet]
-        public HttpResponseMessage GetFlightByid(int id)
+        public HttpResponseMessage GetFlightAByid(int id)
         {
-            var ent = QueryManager.GetInstance().GetFlightbyid(id);
+            var ent = QueryManager.GetInstance().GetFlightPlanebyid(id);
             if (ent != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, ent);

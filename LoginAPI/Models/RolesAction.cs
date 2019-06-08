@@ -15,7 +15,8 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
             command = new SqlCommand("INSERT INTO ROLES(RNAME,ROLEID) VALUES ('" + Rname.ToString() + "',(SELECT COUNT(ROLEID) FROM ROLES))", conn);
             read = command.ExecuteReader();
@@ -31,9 +32,10 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
-            command = new SqlCommand("SELECT * FROM ROLES", conn);
+            command = new SqlCommand("SELECT * FROM ROLES WHERE ROLEID > 0", conn);
             read = command.ExecuteReader();
 
             List<Role> roles = new List<Role>();

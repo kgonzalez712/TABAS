@@ -12,7 +12,7 @@ namespace LoginAPI.Controllers
     {
         //metodo para insertar una nueva universidad
         [HttpPost]
-        [Route("Univerities/AddUniversity")]
+        [Route("Universities/AddUniversity")]
         public void isertUniversity([FromBody] University u)
         {
             UniversityActions con = new UniversityActions();

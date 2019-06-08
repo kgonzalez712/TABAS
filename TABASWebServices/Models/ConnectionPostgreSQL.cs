@@ -18,7 +18,8 @@ namespace TABASWebServices.Models
         public NpgsqlConnection OpenConnection()
         {
             NpgsqlConnection con = new NpgsqlConnection();
-            var constr = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=12345;Database=TABAS";
+            var constr ="Server = tabasdb.postgres.database.azure.com; Database =TABAS; Port = 5432; User Id = Kevin@tabasdb; Password =CE07121995tec; Ssl Mode = Require";
+            // var constr = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=12345;Database=TABAS";
 
             if (!string.IsNullOrWhiteSpace(constr))
             {

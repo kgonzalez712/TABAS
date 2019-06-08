@@ -49,11 +49,11 @@ namespace LoginAPI.Controllers
 
             if (login.PASSWRD == password)
             {
-                return Ok("True");
+                return Ok(id.ToString());
             }
             else
             {
-                return Ok("False");
+                return Ok("Error");
             }
         }
 

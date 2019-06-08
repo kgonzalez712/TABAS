@@ -15,7 +15,7 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             conn.Open();
             command = new SqlCommand("SELECT * FROM Employee E JOIN EmployeeXRole ExR ON E.EmployeeID=ExR.EmployeeID JOIN ROLES R ON R.ROLEID=ExR.ROLEID", conn);
             read = command.ExecuteReader();
@@ -47,7 +47,8 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
             command = new SqlCommand("SELECT EmployeeID,Passwrd FROM Employee WHERE EmployeeID=" + id.ToString(), conn);
             read = command.ExecuteReader();
@@ -75,7 +76,8 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
             command = new SqlCommand("INSERT INTO Employee(EmployeeID,Passwrd,FName,LName) VALUES(" + id.ToString() + ",'" + passwrd.ToString() + "','" +
                 fname.ToString() + "','" + lname.ToString() + "') INSERT INTO EmployeeXRole(EmployeeID,ROLEID) VALUES (" + id.ToString() + "," + roleid.ToString() + ")", conn);
@@ -94,7 +96,8 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
             command = new SqlCommand("SELECT * FROM Employee E JOIN EmployeeXRole ExR ON E.EmployeeID=ExR.EmployeeID JOIN ROLES R ON R.ROLEID=ExR.ROLEID WHERE ExR.ROLEID=" + roleid.ToString(), conn);
             read = command.ExecuteReader();
@@ -127,9 +130,10 @@ namespace LoginAPI.Models
             SqlCommand command;
             SqlDataReader read;
 
-            conn = new SqlConnection("Data Source=(local);Initial Catalog=LOGINDB;Integrated Security=True");
+            conn = new SqlConnection("Server=tcp:tabaslog.database.windows.net,1433;Initial Catalog=tabaslgin;Persist Security Info=False;User ID=Kevin;Password=CE071295tec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
             conn.Open();
-            command = new SqlCommand("SELECT * FROM Employee E JOIN EmployeeXRole ExR ON E.EmployeeID=ExR.EmployeeID JOIN ROLES R ON R.ROLEID=ExR.ROLEID  WHERE EmployeeID=" + id.ToString(), conn);
+            command = new SqlCommand("SELECT * FROM Employee E JOIN EmployeeXRole ExR ON E.EmployeeID=ExR.EmployeeID JOIN ROLES R ON R.ROLEID=ExR.ROLEID  WHERE E.EmployeeID=" + id.ToString(), conn);
             read = command.ExecuteReader();
 
 

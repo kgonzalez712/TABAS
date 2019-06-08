@@ -86,5 +86,39 @@ namespace TABASWebServices.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
             }
         }
+
+        /// <summary>
+        /// Modifies a status
+        /// </summary>
+        /// <param name="shp"></param>
+        /// <returns></returns>
+        [Route("Shipping/Bag/{id}")]
+        [HttpPut]
+        public void UpdateBagStatus(int id )
+        {
+            try
+            {
+                QueryManager.GetInstance().UpdateShStatus(id);
+                var message = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        [Route("setBin/{id}/{value}")]
+        [HttpPut]
+        public void UpdateBagBinStatus(int id, string value)
+        {
+            try
+            {
+                QueryManager.GetInstance().UpdatePbStatus(id,value);
+                var message = Request.CreateResponse(HttpStatusCode.Accepted);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
     }
 }

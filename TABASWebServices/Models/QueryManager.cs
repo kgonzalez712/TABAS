@@ -36,48 +36,6 @@ namespace TABASWebServices.Models
         /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE AIRPORT ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// / This method inserts a new row in the Airport Table on the PostgreSQL Database
-        /// </summary>
-        /// <param name="airport"></param>
-        public void Insert_Airport(Airport airport)
-        {
-            var conn = new ConnectionPostgreSQL();
-            var connstr = string.Empty;
-            int res;
-
-
-            using (var db = conn.OpenConnection())
-            {
-                connstr = "SELECT INSERT_AIRPORT(@ANAME,@ICODE,@SCODE,@CCODE,@CNAME)";
-                try
-                {
-                    var comando = new NpgsqlCommand(connstr, db);
-                    comando.Parameters.Add("@ANAME", NpgsqlDbType.Varchar, 50).Value = airport.AIRPORT_NAME;
-                    comando.Parameters.Add("@ICODE", NpgsqlDbType.Char, 3).Value = airport.IATA_CODE;
-                    comando.Parameters.Add("@SCODE", NpgsqlDbType.Char, 2).Value = airport.STATE_CODE;
-                    comando.Parameters.Add("@CCODE", NpgsqlDbType.Char, 2).Value = airport.COUNTRY_CODE;
-                    comando.Parameters.Add("@CNAME", NpgsqlDbType.Varchar, 50).Value = airport.COUNTRY_NAME;
-                    res = comando.ExecuteNonQuery();
-                    if (res > 0)
-                    {
-                        Console.WriteLine("Insert completed");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Insert operation could not be completed");
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
-
-        }
-
-        /// <summary>
         /// This methods returns all the rows on the Airport Table  from te PostgreSQL Database
         /// </summary>
         /// <returns></returns>
@@ -142,8 +100,6 @@ namespace TABASWebServices.Models
                         result.STATE_CODE = (string)lector["STATE_CODE"];
                         result.COUNTRY_CODE = (string)lector["COUNTRY_CODE"];
                         result.COUNTRY_NAME = (string)lector["COUNTRY_NAME"];
-
-
                     }
                 }
                 catch (Exception e)
@@ -291,7 +247,7 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT * FROM AIRPLANE_DETAILS WHERE AIRPLANE_ID =" + a;
+                connstr = "SELECT * FROM AIRPLANE_DETAILS WHERE PLANE_ID =" + a;
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
@@ -448,7 +404,7 @@ namespace TABASWebServices.Models
         /// </summary>
         /// <param name="a"></param>
         /// <returns></returns>
-        public int GetFlightPlanebyid(int a)
+        public Flight GetFlightPlanebyid(int a)
         {
             var result = new Flight();
             var conn = new ConnectionPostgreSQL();
@@ -456,14 +412,21 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT PLANE_ID FROM FLIGHT_INFO WHERE FLIGHT_ID =" + a;
+                connstr = "SELECT * FROM FLIGHT_INFO WHERE FLIGHT_ID =" + a;
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
                     var lector = comando.ExecuteReader();
                     while (lector.Read())
                     {
+                        result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
+                        result.ORIGIN_AIRPORT = (string)lector["ORIGIN_AIRPORT"];
+                        result.DESTINATION_AIRPORT = (string)lector["DESTINATION_AIRPORT"];
+                        result.DEPARTURE_DATE = lector["DEPARTURE_DATE"].ToString();
+                        result.DEPARTURE_HOUR = lector["DEPARTURE_HOUR"].ToString();
+                        result.PRICE = (int)lector["PRICE"];
                         result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.BAG_CAPACITY = (int)lector["BAG_CAPACITY"];
                     }
                 }
                 catch (Exception e)
@@ -473,7 +436,7 @@ namespace TABASWebServices.Models
                 }
             }
 
-            return result.PLANE_ID;
+            return result;
         }
 
         /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE BRAND ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -492,12 +455,12 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT INSERT_BRAND(@BNAME,@BMODEL)";
+                connstr = "SELECT INSERT_BRAND(@BNAME)";
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
                     comando.Parameters.Add("@BNAME", NpgsqlDbType.Varchar, 25).Value = brand.BRAND_NAME;
-                    comando.Parameters.Add("@BMODEL", NpgsqlDbType.Char, 20).Value = brand.BRAND_MODEL;
+
                     res = comando.ExecuteNonQuery();
                     if (res > 0)
                     {
@@ -542,7 +505,7 @@ namespace TABASWebServices.Models
                         var result = new Brand();
                         result.BRAND_ID = (int)lector["BRAND_ID"];
                         result.BRAND_NAME = (string)lector["BRAND_NAME"];
-                        result.BRAND_MODEL = (string)lector["BRAND_MODEL"];
+
                         rlist.Add(result);
                     }
                 }
@@ -555,7 +518,6 @@ namespace TABASWebServices.Models
 
             return rlist;
         }
-
 
         /// <summary>
         /// Gets a Brand by id from the database
@@ -579,7 +541,6 @@ namespace TABASWebServices.Models
                     {
                         result.BRAND_ID = (int)lector["BRAND_ID"];
                         result.BRAND_NAME = (string)lector["BRAND_NAME"];
-                        result.BRAND_MODEL = (string)lector["BRAND_MODEL"];
                     }
                 }
                 catch (Exception e)
@@ -602,7 +563,7 @@ namespace TABASWebServices.Models
         /// / This method inserts a new row in the BRAND Table on the PostgreSQL Database
         /// </summary>
         /// <param name="brand"></param>
-        public void Insert_Bagcart(Bagcart bc)
+        public void Insert_Bagcart(BC bc)
         {
             var conn = new ConnectionPostgreSQL();
             var connstr = string.Empty;
@@ -611,16 +572,15 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT INSERT_BAGCART(@BCID,@C,@QR,@S,@BNAME,@BMODEL,@FID)";
+                connstr = "SELECT INSERT_BAGCART(@CAP,@BRID, @QR,@STATUS,@MO,@FID)";
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
-                    comando.Parameters.Add("@BCID", NpgsqlDbType.Integer).Value = bc.BAGCART_ID;
-                    comando.Parameters.Add("@C", NpgsqlDbType.Integer).Value = bc.CAPACITY;
+                    comando.Parameters.Add("@CAP", NpgsqlDbType.Integer).Value = bc.CAPACITY;
+                    comando.Parameters.Add("@BRID", NpgsqlDbType.Integer).Value = bc.BRAND_ID;
                     comando.Parameters.Add("@QR", NpgsqlDbType.Varchar, 10).Value = bc.QRCODE;
-                    comando.Parameters.Add("@S", NpgsqlDbType.Varchar, 10).Value = bc.STATUS;
-                    comando.Parameters.Add("@BNAME", NpgsqlDbType.Varchar, 25).Value = bc.BRAND_NAME;
-                    comando.Parameters.Add("@BMODEL", NpgsqlDbType.Varchar, 20).Value = bc.BRAND_MODEL;
+                    comando.Parameters.Add("@STATUS", NpgsqlDbType.Varchar, 15).Value = bc.STATUS;
+                    comando.Parameters.Add("@MO", NpgsqlDbType.Varchar, 25).Value = bc.MODEL;
                     comando.Parameters.Add("@FID", NpgsqlDbType.Integer).Value = bc.FLIGHT_ID;
                     res = comando.ExecuteNonQuery();
                     if (res > 0)
@@ -668,8 +628,51 @@ namespace TABASWebServices.Models
                         result.CAPACITY = (int) lector["CAPACITY"];
                         result.QRCODE = (string)lector["QRCODE"];
                         result.STATUS = (string)lector["STATUS"];
+                        result.BRAND_ID = (int) lector["BRAND_ID"];
                         result.BRAND_NAME = (string)lector["BRAND_NAME"];
-                        result.BRAND_MODEL = (string)lector["BRAND_MODEL"];
+                        result.MODEL = (string)lector["MODEL"];
+                        result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+        /// <summary>
+        /// This methods returns all the rows on the BAGCARTS Table THAT ARE NOT FULL from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bagcart> GetBagCartsNF(int id)
+        {
+            var rlist = new List<Bagcart>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAGCART_DETAILS WHERE STATUS = 'Disponible' AND FLIGHT_ID="+ id;
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bagcart();
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.CAPACITY = (int)lector["CAPACITY"];
+                        result.QRCODE = (string)lector["QRCODE"];
+                        result.STATUS = (string)lector["STATUS"];
+                        result.BRAND_ID = (int)lector["BRAND_ID"];
+                        result.BRAND_NAME = (string)lector["BRAND_NAME"];
+                        result.MODEL = (string)lector["MODEL"];
                         result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
                         rlist.Add(result);
                     }
@@ -708,8 +711,9 @@ namespace TABASWebServices.Models
                         result.CAPACITY = (int)lector["CAPACITY"];
                         result.QRCODE = (string)lector["QRCODE"];
                         result.STATUS = (string)lector["STATUS"];
+                        result.BRAND_ID = (int)lector["BRAND_ID"];
                         result.BRAND_NAME = (string)lector["BRAND_NAME"];
-                        result.BRAND_MODEL = (string)lector["BRAND_MODEL"];
+                        result.MODEL = (string)lector["MODEL"];
                         result.FLIGHT_ID = (int)lector["FLIGHT_ID"];
                     }
                 }
@@ -727,11 +731,11 @@ namespace TABASWebServices.Models
         /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE BAG ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        /// <summary>
-        /// / This method inserts a new row in the BRAND Table on the PostgreSQL Database
-        /// </summary>
-        /// <param name="brand"></param>
-        public void Insert_Bag(Bag bag)
+            /// <summary>
+            /// / This method inserts a new row in the BAG Table on the PostgreSQL Database
+            /// </summary>
+            /// <param name="brand"></param>
+            public void Insert_Bag(Bag bag)
         {
             var conn = new ConnectionPostgreSQL();
             var connstr = string.Empty;
@@ -740,15 +744,19 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT INSERT_BAG(@COLOUR,@WEIGHT,@PRICE,@BAGCART_ID,@CLIENT_ID)";
+                connstr = "SELECT INSERT_BAG(@COLOUR,@WEIGHT,@PRICE,@SC,@SH,@BCID,@PID,@PBIN,@CLIENT_ID)";
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
-                    comando.Parameters.Add("@COLOUR", NpgsqlDbType.Varchar,10).Value = bag.COLOUR;
-                    comando.Parameters.Add("@WEIGHT", NpgsqlDbType.Double).Value = bag.WEIGHT;
-                    comando.Parameters.Add("@PRICE", NpgsqlDbType.Double).Value = bag.PRICE;
-                    comando.Parameters.Add("@BAGCART_ID", NpgsqlDbType.Integer).Value = bag.BAGCART_ID;
-                    comando.Parameters.Add("@CLIENT_ID", NpgsqlDbType.Integer).Value = bag.CLIENT_ID;
+                    comando.Parameters.Add("@COLOUR", NpgsqlDbType.Varchar,15).Value = bag.COLOUR;
+                    comando.Parameters.Add("@WEIGHT", NpgsqlDbType.Integer).Value = bag.WEIGHT;
+                    comando.Parameters.Add("@PRICE", NpgsqlDbType.Integer).Value = bag.PRICE;
+                    comando.Parameters.Add("@SC", NpgsqlDbType.Varchar, 15).Value = bag.SCAN_STATUS;
+                    comando.Parameters.Add("@SH", NpgsqlDbType.Varchar, 15).Value = bag.SHIP_STATUS;
+                    comando.Parameters.Add("@BCID", NpgsqlDbType.Integer).Value = bag.BAGCART_ID;
+                    comando.Parameters.Add("@PID", NpgsqlDbType.Integer).Value = bag.PLANE_ID;
+                    comando.Parameters.Add("@PBIN", NpgsqlDbType.Varchar,2).Value = bag.PLANE_BIN;
+                    comando.Parameters.Add("@CLIENT_ID", NpgsqlDbType.Varchar,9).Value = bag.CLIENT_ID;
                     res = comando.ExecuteNonQuery();
                     if (res > 0)
                     {
@@ -793,10 +801,236 @@ namespace TABASWebServices.Models
                         var result = new Bag();
                         result.BAG_ID = (int)lector["BAG_ID"];
                         result.COLOUR = (string)lector["COLOUR"];
-                        result.WEIGHT = (float)lector["WEIGHT"];
-                        result.PRICE = (float)lector["PRICE"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string) lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string) lector["SHIP_STATUS"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
-                        result.CAPACITY = (int)lector["CAPACITY"];
+                        result.PLANE_ID = (int) lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
+                        result.CLIENT_ID = (string)lector["CLIENT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+        /// <summary>
+        /// This methods returns all the rows on the Brand Table  from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bag> GetBagsBC(int bc)
+        {
+            var rlist = new List<Bag>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAG WHERE BAGCART_ID=" +bc;
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bag();
+                        result.BAG_ID = (int)lector["BAG_ID"];
+                        result.COLOUR = (string)lector["COLOUR"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
+                        result.CLIENT_ID = (string)lector["CLIENT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+        /// <summary>
+        /// This methods returns all the rows on the Brand Table  from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bag> GetClientsBags(string c)
+        {
+            var rlist = new List<Bag>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAG WHERE CLIENT_ID=" + "'"+c+"'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bag();
+                        result.BAG_ID = (int)lector["BAG_ID"];
+                        result.COLOUR = (string)lector["COLOUR"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
+                        result.CLIENT_ID = (string)lector["CLIENT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+
+        /// <summary>
+        /// This methods returns all the rows on the bag Table that are acepted from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bag> GetAceptedBags()
+        {
+            var rlist = new List<Bag>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAG WHERE SCAN_STATUS = 'Aprobado'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bag();
+                        result.BAG_ID = (int)lector["BAG_ID"];
+                        result.COLOUR = (string)lector["COLOUR"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
+                        result.CLIENT_ID = (string)lector["CLIENT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+
+        /// <summary>
+        /// This methods returns all the rows on the bag Table that are acepted from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bag> GetAceptedBagsBC(int bc)
+        {
+            var rlist = new List<Bag>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAG WHERE SCAN_STATUS = 'Aprobado' AND BAGCART_ID=" + bc;
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bag();
+                        result.BAG_ID = (int)lector["BAG_ID"];
+                        result.COLOUR = (string)lector["COLOUR"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
+                        result.CLIENT_ID = (string)lector["CLIENT_ID"];
+                        rlist.Add(result);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+
+            return rlist;
+        }
+
+
+        /// <summary>
+        /// This methods returns all the rows on the bag Table that are acepted from te PostgreSQL Database
+        /// </summary>
+        /// <returns></returns>
+        public List<Bag> GetDenniedBags()
+        {
+            var rlist = new List<Bag>();
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "SELECT * FROM BAG WHERE SCAN_STATUS = 'Denegado'";
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    var lector = comando.ExecuteReader();
+                    int i = 0;
+                    while (lector.Read())
+                    {
+                        var result = new Bag();
+                        result.BAG_ID = (int)lector["BAG_ID"];
+                        result.COLOUR = (string)lector["COLOUR"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
+                        result.BAGCART_ID = (int)lector["BAGCART_ID"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
                         result.CLIENT_ID = (string)lector["CLIENT_ID"];
                         rlist.Add(result);
                     }
@@ -833,10 +1067,13 @@ namespace TABASWebServices.Models
                     {
                         result.BAG_ID = (int)lector["BAG_ID"];
                         result.COLOUR = (string)lector["COLOUR"];
-                        result.WEIGHT = (float)lector["WEIGHT"];
-                        result.PRICE = (float)lector["PRICE"];
+                        result.WEIGHT = (int)lector["WEIGHT"];
+                        result.PRICE = (int)lector["PRICE"];
+                        result.SCAN_STATUS = (string)lector["SCAN_STATUS"];
+                        result.SHIP_STATUS = (string)lector["SHIP_STATUS"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
-                        result.CAPACITY = (int)lector["CAPACITY"];
+                        result.PLANE_ID = (int)lector["PLANE_ID"];
+                        result.PLANE_BIN = (string)lector["PLANE_BIN"];
                         result.CLIENT_ID = (string)lector["CLIENT_ID"];
                     }
                 }
@@ -849,6 +1086,8 @@ namespace TABASWebServices.Models
 
             return result;
         }
+
+
 
         /////////////////////////////////////////////////////////////// CRUD METHODS RELATED TO THE SHIPPER ENTITY //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -867,16 +1106,14 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT INSERT_SHIPPING(@D,@H,@ST,@BC ,@B,@SUPER)";
+                connstr = "SELECT INSERT_SHIPPING(@SUPER,@DH,@BC ,@B)";
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
-                    comando.Parameters.Add("@D", NpgsqlDbType.Date).Value = shp.SHIPPING_ID;
-                    comando.Parameters.Add("@H", NpgsqlDbType.Time).Value = shp.SHIPPING_HOUR;
-                    comando.Parameters.Add("@ST", NpgsqlDbType.Varchar, 10).Value = shp.STATUS;
-                    comando.Parameters.Add("@B", NpgsqlDbType.Integer).Value = shp.BAG_ID;
+                    comando.Parameters.Add("@SUPER", NpgsqlDbType.Varchar,9).Value = shp.SUPERVISOR;
+                    comando.Parameters.Add("@DH", NpgsqlDbType.Varchar,50).Value = shp.SHIPPING_DATE_HOUR;
                     comando.Parameters.Add("@BC", NpgsqlDbType.Integer).Value = shp.BAGCART_ID;
-                    comando.Parameters.Add("@SUPER", NpgsqlDbType.Integer).Value = shp.SUPERVISOR;
+                    comando.Parameters.Add("@B", NpgsqlDbType.Integer).Value = shp.BAG_ID;
                     res = comando.ExecuteNonQuery();
                     if (res > 0)
                     {
@@ -920,11 +1157,10 @@ namespace TABASWebServices.Models
                     {
                         var result = new Shipper();
                         result.SHIPPING_ID = (int)lector["SHIPPING_ID"];
-                        result.SHIPPING_DATE = lector["SHIPPING_DATE"].ToString();
-                        result.SHIPPING_HOUR = lector["SHIPPING_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SHIPPING_DATE_HOUR = (string)lector["SHIPPING_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                         rlist.Add(result);
                     }
                 }
@@ -959,11 +1195,10 @@ namespace TABASWebServices.Models
                     while (lector.Read())
                     {
                         result.SHIPPING_ID = (int)lector["SHIPPING_ID"];
-                        result.SHIPPING_DATE = lector["SHIPPING_DATE"].ToString();
-                        result.SHIPPING_HOUR = lector["SHIPPING_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SHIPPING_DATE_HOUR = (string)lector["SHIPPING_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                     }
                 }
                 catch (Exception e)
@@ -999,11 +1234,10 @@ namespace TABASWebServices.Models
                     while (lector.Read())
                     {
                         result.SHIPPING_ID = (int)lector["SHIPPING_ID"];
-                        result.SHIPPING_DATE = lector["SHIPPING_DATE"].ToString();
-                        result.SHIPPING_HOUR = lector["SHIPPING_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SHIPPING_DATE_HOUR = (string)lector["SHIPPING_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                     }
                 }
                 catch (Exception e)
@@ -1016,6 +1250,48 @@ namespace TABASWebServices.Models
             return result;
         }
 
+        public void UpdateShStatus(int id)
+        {
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "UPDATE BAG SET SHIP_STATUS = 'En El Avion' WHERE BAG_ID=" + id ;
+                    
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    comando.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
+
+
+        public void UpdatePbStatus(int id, string val)
+        {
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "UPDATE BAG SET PLANE_BIN ="+ "'"+val+"'" + " WHERE BAG_ID=" + id;
+
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    comando.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
 
 
 
@@ -1035,16 +1311,14 @@ namespace TABASWebServices.Models
 
             using (var db = conn.OpenConnection())
             {
-                connstr = "SELECT INSERT_SCANNER(@D,@H,@ST,@BC ,@B,@SUPER)";
+                connstr = "SELECT INSERT_SCAN(@SUPER,@DH,@BC ,@B)";
                 try
                 {
                     var comando = new NpgsqlCommand(connstr, db);
-                    comando.Parameters.Add("@D", NpgsqlDbType.Date).Value = sc.SCAN_DATE;
-                    comando.Parameters.Add("@H", NpgsqlDbType.Time).Value = sc.SCAN_HOUR;
-                    comando.Parameters.Add("@ST", NpgsqlDbType.Varchar, 10).Value = sc.STATUS;
-                    comando.Parameters.Add("@B", NpgsqlDbType.Integer).Value = sc.BAG_ID;
+                    comando.Parameters.Add("@SUPER", NpgsqlDbType.Varchar,9).Value = sc.SUPERVISOR;
+                    comando.Parameters.Add("@DH", NpgsqlDbType.Varchar,50).Value = sc.SCAN_DATE_HOUR;
                     comando.Parameters.Add("@BC", NpgsqlDbType.Integer).Value = sc.BAGCART_ID;
-                    comando.Parameters.Add("@SUPER", NpgsqlDbType.Integer).Value = sc.SUPERVISOR;
+                    comando.Parameters.Add("@B", NpgsqlDbType.Integer).Value = sc.BAG_ID;
                     res = comando.ExecuteNonQuery();
                     if (res > 0)
                     {
@@ -1088,11 +1362,10 @@ namespace TABASWebServices.Models
                     {
                         var result = new Scanner();
                         result.SCAN_ID = (int)lector["SCAN_ID"];
-                        result.SCAN_DATE = lector["SCAN_DATE"].ToString();
-                        result.SCAN_HOUR = lector["SCAN_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SCAN_DATE_HOUR = (string)lector["SCAN_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                         rlist.Add(result);
                     }
                 }
@@ -1127,11 +1400,10 @@ namespace TABASWebServices.Models
                     while (lector.Read())
                     {
                         result.SCAN_ID = (int)lector["SCAN_ID"];
-                        result.SCAN_DATE = lector["SCAN_DATE"].ToString();
-                        result.SCAN_HOUR = lector["SCAN_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SCAN_DATE_HOUR = (string)lector["SCAN_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                     }
                 }
                 catch (Exception e)
@@ -1167,11 +1439,10 @@ namespace TABASWebServices.Models
                     while (lector.Read())
                     {
                         result.SCAN_ID = (int)lector["SCAN_ID"];
-                        result.SCAN_DATE = lector["SCAN_DATE"].ToString();
-                        result.SCAN_HOUR = lector["SCAN_HOUR"].ToString();
+                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
+                        result.SCAN_DATE_HOUR = (string)lector["SCAN_DATE_HOUR"];
                         result.BAGCART_ID = (int)lector["BAGCART_ID"];
                         result.BAG_ID = (int)lector["BAG_ID"];
-                        result.SUPERVISOR = (string)lector["SUPERVISOR"];
                     }
                 }
                 catch (Exception e)
@@ -1182,6 +1453,46 @@ namespace TABASWebServices.Models
             }
 
             return result;
+        }
+
+        public void UpdateScAStatus(int id)
+        {
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "UPDATE BAG SET SCAN_STATUS = 'Aprobado' WHERE BAG_ID =" + id;
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    comando.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
+
+        public void UpdateScDStatus(int id)
+        {
+            var conn = new ConnectionPostgreSQL();
+            var connstr = string.Empty;
+            using (var db = conn.OpenConnection())
+            {
+                connstr = "UPDATE BAG SET SCAN_STATUS = 'Denegado' WHERE BAG_ID =" + id;
+                try
+                {
+                    var comando = new NpgsqlCommand(connstr, db);
+                    comando.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
         }
 
     }
